@@ -1,6 +1,4 @@
 import React, {useState} from "react";
-import { useonKeyPress } from "./Hooks/useOnKeyPress";
-
 
 
 //create your first component
@@ -48,7 +46,7 @@ const keyPressHandler = (event) => {
 					}
 				})}
 			</ul>
-			
+			<div className="container taskCounter"><span>{tasks.length} item(s) left</span></div>
 		</div>
 	);
 };
