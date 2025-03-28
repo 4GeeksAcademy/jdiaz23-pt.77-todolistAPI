@@ -1,23 +1,46 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 
 
-//create your first component
+//create a post to automatically post username
+
 const Home = () => {
 
 	const [tasks, setTasks ] = useState([]);
 	const [userInput, setUserInput] = useState("");
 	
+useEffect ( () => {
+	getUser() 
+} ,[])
 
-const addToDo = (e) => {
-	e.preventDefault ();
-	let task = {text: userInput, finished : false}
-	setTasks([...tasks, task]);
-	setUserInput("");
+const getUser = async () =>{
+	let getResponse = await fetch("https://playground.4geeks.com/todo/users/jdiaz23")
+	let data = await getResponse.json()
+	setTasks(data.todos)
 }
 
-const removeTask = (i) => {
-	const newArray = tasks.filter((task, index) => index !== i);
-	setTasks(newArray)
+const addToDo = async () => {
+
+		let response = await fetch("https://playground.4geeks.com/todo/todos/jdiaz23", {
+		method: "POST",
+		body: JSON.stringify({ 
+			label: userInput,
+			is_done: false }),
+		headers: { "Content-type": "application/json" },
+	})
+	let data = await response.json()
+	console.log("here is my data", data)
+	getUser()
+	return data;
+}
+
+const removeTask = async (id) => {
+	 let task = await fetch(`https://playground.4geeks.com/todo/todos/${id}`, {
+		method: "Delete",
+		headers: { "Content-type": "application/json" },
+	})
+	// let data = await task.json()
+	getUser()
+	return task;
 }
 
 const keyPressHandler = (event) => {
@@ -42,7 +65,7 @@ const keyPressHandler = (event) => {
 			<ul>
 				{tasks?.map((task,index) => {
 					if (task !=true) {
-						return (<li key={index}>{task.text}<span onClick={() =>removeTask(index)} id="redX"> ❌ </span> </li>)
+						return (<li key={index}>{task.label}<span onClick={() =>removeTask(task.id)} id="redX"> ❌ </span> </li>)
 					}
 				})}
 			</ul>
