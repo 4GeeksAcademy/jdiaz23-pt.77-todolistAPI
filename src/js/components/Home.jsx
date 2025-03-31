@@ -5,8 +5,8 @@ import React, { useState, useEffect } from "react";
 const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [userInput, setUserInput] = useState("");
-  const [editingId, setEditingId] = useState(null)
-  const [editText, setEditText] = useState("")
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState("");
 
   const CheckboxWithLineThrough = (index) => {
     const newTasks = [...tasks];
@@ -63,10 +63,10 @@ const Home = () => {
     getUser();
   };
 
-  const startEditing = (task) =>{
-	setEditingId(task.id)
-	setEditText(task.label)
-  } 
+  const startEditing = (task) => {
+    setEditingId(task.id);
+    setEditText(task.label);
+  };
 
   const updateList = async (id) => {
     let response = await fetch(
@@ -80,9 +80,9 @@ const Home = () => {
         }),
       }
     );
-	setEditingId(null)
-	setEditText("")
-	getUser()
+    setEditingId(null);
+    setEditText("");
+    getUser();
   };
 
   const keyPressHandler = (event) => {
@@ -91,7 +91,6 @@ const Home = () => {
       addToDo(event);
     }
   };
-
 
   return (
     <div className="container text-center mt-5 h-100">
@@ -132,16 +131,20 @@ const Home = () => {
               ) : (
                 <>
                   {task.label}
-                  <span onClick={() => removeTask(task.id)} id="redX">
-                    {" "}
-                    ❌{" "}
-                  </span>
+
                   <input
                     type="checkbox"
                     checked={task.is_done}
                     onChange={() => CheckboxWithLineThrough(index)}
                   />
-                  <span onClick={() => startEditing(task)}> ✏️ </span>
+                  <span onClick={() => removeTask(task.id)} id="redX">
+                    {" "}
+                    ❌{" "}
+                  </span>
+                  <span onClick={() => startEditing(task)} id="editPencil">
+                    {" "}
+                    ✏️{" "}
+                  </span>
                 </>
               )}
             </li>
